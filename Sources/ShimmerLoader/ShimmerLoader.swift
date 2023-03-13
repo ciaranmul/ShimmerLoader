@@ -3,7 +3,6 @@ import SwiftUI
 public struct ShimmerLoader: ViewModifier {
     @State private var animating = false
     @State private var isLoading: Bool
-    @State private var contentSize: CGSize = .zero
 
     public init(isLoading: Bool) {
         self.isLoading = .init(isLoading)
@@ -14,34 +13,20 @@ public struct ShimmerLoader: ViewModifier {
             GeometryReader { geo in
                 ZStack {
                     content
-                        .background(
-                            GeometryReader { innerGeometry in
-                                Color.clear
-                                    .onAppear {
-                                        contentSize = innerGeometry.size
-                                    }
-                            }
-                        )
 
-                    content
-                        .mask(
-                            Color.white
-                                .offset(x: -geo.size.width)
-                                .offset(x: animating ? geo.size.width * 2 : 0)
-                        )
-                        .onAppear {
-                            withAnimation {
-                                withAnimation(.linear(duration: 2).repeatForever(autoreverses: false)) {
-                                    animating.toggle()
-                                }
-                            }
+                    LinearGradient(colors: [.white, .white.opacity(0)],
+                                   startPoint: .trailing,
+                                   endPoint: .center)
+                    .offset(x: -geo.size.width)
+                    .offset(x: animating ? geo.size.width * 2 : 0)
+                    .mask(content)
+                    .onAppear {
+                        withAnimation(.linear(duration: 1).repeatForever(autoreverses: false)) {
+                            animating.toggle()
                         }
+                    }
                 }
                 .redacted(reason: .placeholder)
-                .frame(
-                    width: geo.frame(in: .global).width,
-                    height: geo.frame(in: .global).height
-                )
             }
         } else {
             content
