@@ -61,41 +61,63 @@ public extension View {
 
 struct ShimmerLoader_Previews: PreviewProvider {
     static var previews: some View {
-        HStack {
-            Image(systemName: "photo.fill")
-                .resizable()
-                .foregroundColor(.black)
-                .frame(width: 50, height: 50)
-            PreviewView()
-            Image(systemName: "photo.fill")
-                .resizable()
-                .foregroundColor(.black)
-                .frame(width: 50, height: 50)
-        }
-        .padding()
+        ContentView()
+            .padding()
+            .loadingShimmer()
+        
+        DebugView()
     }
 
-    struct PreviewView: View {
+    struct ContentView: View {
+        var body: some View {
+            VStack(alignment: .leading, spacing: 10) {
+                Image(systemName: "photo.fill")
+                    .resizable()
+                    .frame(width: 200, height: 200)
+                
+                Text("Loading Shimmer Modifier Demo")
+                    .font(.largeTitle)
+                
+                Text("Using redacted modifier with linear gradient mask.")
+            }
+            .padding()
+        }
+    }
+    
+    struct DebugView: View {
         @State private var isLoading = true
 
         var body: some View {
-            VStack(alignment: .leading) {
-                Toggle("Is Loading", isOn: $isLoading)
-                Text(isLoading ? "loading..." : "done")
-                VStack(alignment: .leading, spacing: 10) {
-                    Image(systemName: "photo.fill")
-                        .resizable()
-                        .frame(width: 200, height: 200)
+            HStack {
+                Image(systemName: "photo.fill")
+                    .resizable()
+                    .foregroundColor(.black)
+                    .frame(width: 50, height: 50)
+                
+                VStack(alignment: .leading) {
+                    Toggle("Is Loading", isOn: $isLoading)
+                    Text(isLoading ? "loading..." : "done")
+                    VStack(alignment: .leading, spacing: 10) {
+                        Image(systemName: "photo.fill")
+                            .resizable()
+                            .frame(width: 200, height: 200)
 
-                    Text("Loading Shimmer Modifier Demo")
-                        .font(.largeTitle)
+                        Text("Loading Shimmer Modifier Demo")
+                            .font(.largeTitle)
 
-                    Text("Using redacted modifier with linear gradient mask.")
+                        Text("Using redacted modifier with linear gradient mask.")
+                    }
+                    .padding()
+                    .background(Color.orange)
+                    .loadingShimmer(isLoading: $isLoading)
                 }
-                .padding()
-                .background(Color.orange)
-                .loadingShimmer(isLoading: $isLoading)
+                
+                Image(systemName: "photo.fill")
+                    .resizable()
+                    .foregroundColor(.black)
+                    .frame(width: 50, height: 50)
             }
+            .previewDisplayName("Debug View")
         }
     }
 }
