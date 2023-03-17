@@ -31,6 +31,9 @@ struct ShimmerLoader: ViewModifier {
                         animating.toggle()
                     }
                 }
+                .mask(
+                    content
+                )
             }
             .redacted(reason: .placeholder)
             .fixedSize(horizontal: false, vertical: true)
