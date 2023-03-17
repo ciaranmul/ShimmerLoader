@@ -25,6 +25,10 @@ struct ShimmerLoader: ViewModifier {
                 }
                 .mask(
                     content
+                        .overlay(
+                            Rectangle()
+                                .foregroundColor(.white)
+                        )
                 )
             }
             .redacted(reason: .placeholder)
