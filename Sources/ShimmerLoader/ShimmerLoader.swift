@@ -9,14 +9,6 @@ struct ShimmerLoader: ViewModifier {
         self._isLoading = isLoading
     }
 
-    init() {
-        self._isLoading = Binding(get: {
-            true
-        }, set: { _ in
-            return
-        })
-    }
-
     public func body(content: Content) -> some View {
         if isLoading {
             ZStack {
@@ -52,13 +44,17 @@ struct ShimmerLoader: ViewModifier {
 }
 
 public extension View {
+    /// Modifies a view to redact its contents and apply a shimmer animation when the provided Binding is `true`.
+    ///
+    /// - Parameters:
+    ///      - isLoading: Binding to control whether the loading effect should apply
     func loadingShimmer(isLoading: Binding<Bool>) -> some View {
         self.modifier(ShimmerLoader(isLoading: isLoading))
     }
 
-    /// Modifies the view to redact its contents
+    /// Modifies a view to redact its contents and apply a shimmer animation
     func loadingShimmer() -> some View {
-        self.modifier(ShimmerLoader())
+        self.modifier(ShimmerLoader(isLoading: .constant(true)))
     }
 }
 
